@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>途阳旅游</title>
+  <style>
+    body {
+      background-image: url('../static/back.webp');
+      background-size: cover;
+      background-repeat: no-repeat;
+      font-family: Arial, sans-serif;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    .content {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    select, input[type="number"] {
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+      margin-right: 10px;
+    }
+
+    button {
+      background-color: green;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-left: 20px;
+      height: 40px;
+      line-height: 20px;
+      font-size: 20px;
+    }
+
+    button:hover {
+      background-color: blue;
+    }
+
+    .budget-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .budget-container label {
+      margin-right: 10px;
+    }
+
+    .budget-container input[type="number"] {
+      width: 100px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .row label {
+      margin-right: 10px;
+    }
+
+    .row select,
+    .row input[type="number"] {
+      margin-right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <h1>请选择目的地、预算、旅行天数 <button>搜索</button></h1>
+
+      <div class="row">
+        <label for="province">请选择省级行政区:</label>
+        <select id="province" onchange="updateCityOptions()">
+        <option value="">请选择省级行政区</option>
+        <option value="北京">北京</option>
+        <option value="天津">天津</option> 
+        <option value="河北">河北</option> 
+        <option value="山西">山西</option> 
+        <option value="内蒙古">内蒙古</option> 
+        <option value="辽宁">辽宁</option> 
+        <option value="吉林">吉林</option> 
+        <option value="黑龙江">黑龙江</option> 
+        <option value="上海">上海</option> 
+        <option value="江苏">江苏</option> 
+        <option value="浙江">浙江</option> 
+        <option value="安徽">安徽</option> 
+        <option value="福建">福建</option> 
+        <option value="江西">江西</option> 
+        <option value="山东">山东</option> 
+        <option value="河南">河南</option> 
+        <option value="湖北">湖北</option> 
+        <option value="湖南">湖南</option> 
+        <option value="广东">广东</option> 
+        <option value="广西">广西</option> 
+        <option value="海南">海南</option> 
+        <option value="重庆">重庆</option> 
+        <option value="四川">四川</option> 
+        <option value="贵州">贵州</option> 
+        <option value="云南">云南</option> 
+        <option value="西藏">西藏</option> 
+        <option value="陕西">陕西</option> 
+        <option value="甘肃">甘肃</option> 
+        <option value="青海">青海</option> 
+        <option value="宁夏">宁夏</option> 
+        <option value="新疆">新疆</option> 
+        <option value="台湾">台湾</option> 
+        <option value="香港">香港</option> 
+        <option value="澳门">澳门</option>
+        </select>
+
+        <label for="city">请选择市级行政区:</label>
+        <select id="city">
+          <option value="">请选择市级行政区</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="budget-container">
+          <label for="number">请输入预算:</label>
+          <input type="number" id="number" min="1" required>
+        </div>
+
+        <div class="budget-container">
+          <label for="number2">请输入预计旅行天数:</label>
+          <input type="number" id="number2" min="1" required>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    
+
+  const searchButton = document.querySelector('button');
+  searchButton.addEventListener('click', () => {
+  const province = document.getElementById('province').value;
+  const city = document.getElementById('city').value;
+  const budget = document.getElementById('number').value;
+  const budget2 = document.getElementById('number2').value;
+
+  // 构建请求 URL
+  const url = `/results?province=${province}&city=${city}&budget=${budget}&budget2=${budget2}`;
+
+
+  const fetchData = async (url) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('请求失败');
+    }
+    // 重定向到结果页面
+    window.location.href = '/results';
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+  // 发送 GET 请求到服务器
+  fetchData(url);
+});
+
+    function updateCityOptions() {
+      const provinceSelect = document.getElementById('province');
+      const citySelect = document.getElementById('city');
+      const selectedProvince = provinceSelect.value;
+
+      // 清空城市下拉菜单
+      citySelect.options.length = 1;
+
+      // 根据选择的省级行政区添加市级行政区选项
+      switch (selectedProvince) {
+        case '北京': addCityOptions(['东城区', '西城区', '朝阳区', '丰台区', '石景山区', '海淀区', '门头沟区', '房山区', '通州区', '顺义区', '昌平区', '大兴区', '怀柔区', '平谷区', '密云区', '延庆区']); 
+            break; 
+        case '天津': addCityOptions(['和平区', '河东区', '河西区', '南开区', '河北区', '红桥区', '东丽区', '西青区', '津南区', '北辰区', '武清区', '宝坻区', '滨海新区', '宁河区', '静海区', '蓟州区']); 
+            break; 
+        case '河北': addCityOptions(['石家庄', '唐山', '秦皇岛', '邯郸', '邢台', '保定', '张家口', '承德', '沧州', '廊坊', '衡水']); break; case '山西': addCityOptions(['太原', '大同', '阳泉', '长治', '晋城', '朔州', '晋中', '运城', '忻州', '临汾', '吕梁']); break; case '内蒙古': addCityOptions(['呼和浩特', '包头', '乌海', '赤峰', '通辽', '鄂尔多斯', '呼伦贝尔', '巴彦淖尔', '乌兰察布', '兴安盟', '锡林郭勒盟', '阿拉善盟']); 
+            break; 
+        case '辽宁': addCityOptions(['沈阳', '大连', '鞍山', '抚顺', '本溪', '丹东', '锦州', '营口', '阜新', '辽阳', '盘锦', '铁岭', '朝阳', '葫芦岛']); 
+            break; 
+        case '吉林': addCityOptions(['长春', '吉林', '四平', '辽源', '通化', '白山', '松原', '白城', '延边朝鲜族自治州']); 
+            break; 
+        case '黑龙江': addCityOptions(['哈尔滨', '齐齐哈尔', '鸡西', '鹤岗', '双鸭山', '大庆', '伊春', '佳木斯', '七台河', '牡丹江', '黑河', '绥化', '大兴安岭地区']); 
+            break; 
+        case '上海': addCityOptions(['黄浦区', '徐汇区', '长宁区', '静安区', '普陀区', '虹口区', '杨浦区', '闵行区', '宝山区', '嘉定区', '浦东新区', '金山区', '松江区', '青浦区', '奉贤区', '崇明区']); 
+            break; 
+        case '江苏': addCityOptions(['南京', '无锡', '徐州', '常州', '苏州', '南通', '连云港', '淮安', '盐城', '扬州', '镇江', '泰州', '宿迁']); 
+            break; 
+        case '浙江': addCityOptions(['杭州', '宁波', '温州', '嘉兴', '湖州', '绍兴', '金华', '衢州', '舟山', '台州', '丽水']); 
+            break; 
+        case '安徽': addCityOptions(['合肥', '芜湖', '蚌埠', '淮南', '马鞍山', '淮北', '铜陵', '安庆', '黄山', '滁州', '阜阳', '宿州', '六安', '亳州', '池州', '宣城']); 
+            break; 
+        case '福建': addCityOptions(['福州', '厦门', '莆田', '三明', '泉州', '漳州', '南平', '龙岩', '宁德']); 
+            break; 
+        case '江西': addCityOptions(['南昌', '景德镇', '萍乡', '九江', '新余', '鹰潭', '赣州', '吉安', '宜春', '抚州', '上饶']); 
+            break; 
+        case '山东': addCityOptions(['济南', '青岛', '淄博', '枣庄', '东营', '烟台', '潍坊', '济宁', '泰安', '威海', '日照', '莱芜', '临沂', '德州', '聊城', '滨州', '菏泽']); 
+            break; 
+        case '河南': addCityOptions(['郑州', '开封', '洛阳', '平顶山', '安阳', '鹤壁', '新乡', '焦作', '濮阳', '许昌', '漯河', '三门峡', '南阳', '商丘', '信阳', '周口', '驻马店', '济源']); 
+            break; 
+        case '湖北': addCityOptions(['武汉', '黄石', '十堰', '宜昌', '襄阳', '鄂州', '荆门', '孝感', '荆州', '黄冈', '咸宁', '随州', '恩施土家族苗族自治州', '仙桃', '潜江', '天门', '神农架林区']); 
+            break; 
+        case '湖南': addCityOptions(['长沙', '株洲', '湘潭', '衡阳', '邵阳', '岳阳', '常德', '张家界', '益阳', '郴州', '永州', '怀化', '娄底', '湘西土家族苗族自治州']); 
+            break; 
+        case '广东': addCityOptions(['广州', '深圳', '珠海', '汕头', '佛山', '韶关', '湛江', '肇庆', '江门', '茂名', '惠州', '梅州', '汕尾', '河源', '阳江', '清远', '东莞', '中山', '潮州', '揭阳', '云浮']); 
+            break; 
+        case '广西': addCityOptions(['南宁', '柳州', '桂林', '梧州', '北海', '防城港', '钦州', '贵港', '玉林', '百色', '贺州', '河池', '来宾', '崇左']); 
+            break; 
+        case '海南': addCityOptions(['海口', '三亚', '三沙', '儋州', '琼海', '文昌', '万宁', '东方', '澄迈', '定安', '屯昌', '临高', '白沙黎族自治县', '昌江黎族自治县', '乐东黎族自治县', '陵水黎族自治县', '保亭黎族苗族自治县', '琼中黎族苗族自治县']); 
+            break; 
+        case '重庆': addCityOptions(['渝中区', '大渡口区', '江北区', '沙坪坝区', '九龙坡区', '南岸区', '北碚区', '綦江区', '大足区', '渝北区', '巴南区', '黔江区', '长寿区', '江津区', '合川区', '永川区', '南川区', '璧山区', '铜梁区', '潼南区', '荣昌区', '开州区', '梁平区', '武隆区', '城口县', '丰都县', '垫江县', '忠县', '云阳县', '奉节县', '巫山县', '巫溪县', '石柱土家族自治县', '秀山土家族苗族自治县', '酉阳土家族苗族自治县', '彭水苗族土家族自治县']); 
+            break; 
+        case '四川': addCityOptions(['成都', '自贡', '攀枝花', '泸州', '德阳', '绵阳', '广元', '遂宁', '内江', '乐山', '南充', '眉山', '宜宾', '广安', '达州', '雅安', '巴中', '资阳', '阿坝藏族羌族自治州', '甘孜藏族自治州', '凉山彝族自治州']); 
+            break; 
+        case '贵州': addCityOptions(['贵阳', '六盘水', '遵义', '安顺', '毕节', '铜仁', '黔西南布依族苗族自治州', '黔东南苗族侗族自治州', '黔南布依族苗族自治州']); 
+            break; 
+        case '云南': addCityOptions(['昆明', '曲靖', '玉溪', '保山', '昭通', '丽江', '普洱', '临沧', '楚雄彝族自治州', '红河哈尼族彝族自治州', '文山壮族苗族自治州', '西双版纳傣族自治州', '大理白族自治州', '德宏傣族景颇族自治州', '怒江傈僳族自治州', '迪庆藏族自治州']); 
+            break; 
+        case '西藏': addCityOptions(['拉萨', '日喀则', '昌都', '林芝', '山南', '那曲', '阿里']); 
+            break; 
+        case '陕西': addCityOptions(['西安', '铜川', '宝鸡', '咸阳', '渭南', '延安', '汉中', '榆林', '安康', '商洛']); 
+            break; 
+        case '甘肃': addCityOptions(['兰州', '嘉峪关', '金昌', '白银', '天水', '武威', '张掖', '平凉', '酒泉', '庆阳', '定西', '陇南', '临夏回族自治州', '甘南藏族自治州']); 
+            break; 
+        case '青海': addCityOptions(['西宁', '海东', '海北藏族自治州', '黄南藏族自治州', '海南藏族自治州', '果洛藏族自治州', '玉树藏族自治州', '海西蒙古族藏族自治州']); 
+            break; 
+        case '宁夏': addCityOptions(['银川', '石嘴山', '吴忠', '固原', '中卫']); 
+            break; 
+        case '新疆': addCityOptions(['乌鲁木齐', '克拉玛依', '吐鲁番', '哈密', '昌吉回族自治州', '博尔塔拉蒙古自治州', '巴音郭楞蒙古自治州', '阿克苏地区', '克孜勒苏柯尔克孜自治州', '喀什地区', '和田地区', '伊犁哈萨克自治州', '塔城地区', '阿勒泰地区', '石河子', '阿拉尔', '图木舒克', '五家渠', '北屯', '铁门关', '双河', '可克达拉', '昆玉']); 
+            break; 
+        case '台湾': addCityOptions(['台北市', '新北市', '桃园市', '台中市', '台南市', '高雄市', '基隆市', '新竹市', '嘉义市', '新竹县', '苗栗县', '彰化县', '南投县', '云林县', '嘉义县', '屏东县', '台东县', '花莲县', '宜兰县', '金门县', '连江县', '澎湖县']); 
+            break; 
+        case '香港': addCityOptions(['香港岛', '九龙', '新界']); 
+            break; 
+        case '澳门': addCityOptions(['澳门半岛', '氹仔岛', '路环岛']); 
+            break;
+      }
+    }
+
+    function addCityOptions(cities) {
+      const citySelect = document.getElementById('city');
+      cities.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city;
+        option.text = city;
+        citySelect.add(option);
+      });
+    }  </script>
+</body>
+</html>

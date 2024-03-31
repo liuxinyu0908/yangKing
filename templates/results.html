@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>阳king为您为你推荐如下</title>
+  <style>
+    body {
+      background-image: url('../static/back.webp');
+      background-size: cover;
+      background-repeat: no-repeat;
+      font-family: Arial, sans-serif;
+      color: #fff; /* 调整文本颜色 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 40px;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 36px;
+      font-weight: bold;
+      text-align: center; /* 文字居中 */
+      color:aqua
+    }
+
+    .content {
+      flex-grow: 1;
+      width: 80%;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.7); /* 调整背景色透明度 */
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* 调整阴影效果 */
+      margin-bottom: 20px; /* 添加底部间距 */
+    }
+
+    .content ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .content ul li {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #fff; /* 调整文本颜色 */
+      margin-bottom: 15px;
+    }
+
+    .back-button {
+      background-color: #4caf50; /* 调整按钮颜色 */
+      color: #fff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 18px;
+      margin-top: 20px;
+      border: 2px solid #fff; /* 添加边框 */
+    }
+
+    .back-button:hover {
+      background-color: #45a049; /* 调整悬停背景色 */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>阳king为您为你推荐如下</h1>
+    <div class="content">
+      <ul>
+        {% for result in text_contents %}
+          <li>{{ result }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <button class="back-button" onclick="window.location.href = 'index.html';">返回</button>
+  </div>
+</body>
+</html>
